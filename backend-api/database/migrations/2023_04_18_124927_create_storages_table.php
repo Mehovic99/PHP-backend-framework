@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->integer('account_id');
+            $table->date('expiration_date');
+            $table->date('subscription_date')->nullable();
             $table->timestamps();
         });
     }
