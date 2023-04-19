@@ -94,3 +94,68 @@ However, after inserting on of the tokens as shown in the image and running the 
 ![example 2](https://user-images.githubusercontent.com/76923830/233036280-5193199d-765a-4038-b9a5-dc1b7acd022e.JPG)
 
 With these examples shown, its time to move onto the second feature.
+
+# FEATURE 2: CONTROLLERS
+
+Controllers are functions that are being created in order to read the information from a request object and after processing the request, the controllers create and return a response object. In this example, there is only one unique controller being used. That controller is the **_PostController_**
+
+The PostController class located inside of the App\Http\Controllers folder has functions that each process a different request, correlating to the different api routes. After the functions are written, the response to these functions is called in the class api.php inside of the \routes folder. An example of the controller working on the get method looks like this
+
+```
+class PostsController extends Controller
+{
+    public function index()
+    {
+        $posts = Post::query()->paginate(20);
+        return Post::all();
+    }
+
+    public function store()
+    {
+        request()->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+    
+        return Post::create([
+            'title' => request('title'),
+            'content' => request('content')
+        ]);
+    }
+}
+```
+
+And the response is being generated in the api.php file, which looks like this
+```
+Route::get('/posts', [PostsController::class, 'index'])->middleware('auth:sanctum');
+
+Route::post('/posts', [PostsController::class, 'store'])->middleware('auth:sanctum');
+```
+
+# FEATURE 3: API Pagination
+
+API Pagination refers to the ability of the called query results to be ordered in a certain way. Think of it as the SQL command called ```ORDER BY```. This dictates to the project that the results should be presented in a certain fashion. In this example I have used the following command
+
+```$posts = Post::query()->paginate(20);```
+
+What this command does is that it only displays 20 given results at a time. If there are more than 20, a new JSON value called **_meta_** will show to the user that the results have been filtered on multiple pages and what pages are being currently showed
+
+# FEATURE 4: SLUGS
+
+Slugs are unique identifiers being generated from a string and being stored inside of a table in SQL. For example if the title of a book is "The Catcher in the Rye" the slug would be as follows "the-catcher-in-the-rye". What slugification does is that it generates slug by taking a string and removing and spaces in between. Additionally, slugification makes the string case insensitive, meaning that it does not matter whether the word contains an uppercase letter or a lowercase letter, the slug ignore it. The code to process slugs is generated with the following command inside of the Create_Posts_table.php migration.
+
+```
+Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->string('slug')->unique()->after('title');
+            $table->timestamps();
+        });
+    }
+```
+The string called slug is responsible here. It makes a unique identifier based on the value of the string called title
+
+# FEATURE 5: Database Migration and Seeding
+
+Database migration refers to the process of migrating data from one or more source databases to one or more target databases. In simpler terms, having the values of one database used in another database. Seeding however refers to the process of automatically generating dummy data for a data set inside of a database. This is used in order to save time on creating dummy data and actually making the data as random as possible, in order to allow a wide range of testing. in this case the migration of the postsDatabase used as an example here is located inside of the file **_called 2023_04_19_050315_create_posts_table_**
