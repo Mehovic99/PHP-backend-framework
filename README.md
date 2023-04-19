@@ -302,6 +302,42 @@ Route::put('/posts/{post}', [PostsController::class, 'update'])->middleware('aut
 
 Route::delete('/posts/{post}', [PostsController::class, 'remove'])->middleware('auth:sanctum');
 ```
+# TESTING RESULTS
+
+In order to make sure to test if the progarm works as intended, the features were tested using POSTMAN. Here are some of the results
+
+## GET METHOD RESULTS WITHOUT AUTHENTICATION KEY
+
+![results 1](https://user-images.githubusercontent.com/76923830/233046463-415f0a4e-4025-4651-9400-503cee46f9f5.JPG)
+
+## GET METHOD RESULTS WITH AUTHENTICATION KEY
+
+![results 2](https://user-images.githubusercontent.com/76923830/233046722-2f24cef8-d9c9-4f2f-af9b-6ce4e8fe602f.JPG)
+
+## POST METHOD RESULTS WITHOUT AUTHENTICATION KEY
+
+![results 3](https://user-images.githubusercontent.com/76923830/233046463-415f0a4e-4025-4651-9400-503cee46f9f5.JPG)
+
+## POST METHOD RESULTS WITH AUTHENTICATION KEY
+
+![results 4](https://user-images.githubusercontent.com/76923830/233047464-065307c9-f848-4b73-8f71-af83a4ea14c6.JPG)
+
+## PUT METHOD RESULTS WITHOUT AUTHENTICATION KEY
+
+![results 5](https://user-images.githubusercontent.com/76923830/233046463-415f0a4e-4025-4651-9400-503cee46f9f5.JPG)
+
+## PUT METHOD RESULTS WITH AUTHENTICATION KEY
+
+![results 6](https://user-images.githubusercontent.com/76923830/233048676-779ce6f4-06ee-4ae2-b174-1085d513594d.JPG)
+![proof](https://user-images.githubusercontent.com/76923830/233048753-f9a5e70a-9c8f-4379-86d9-3139d09f680a.JPG)
+
+## DELETE METHOD RESULTS WITHOUT AUTHENTICATION KEY
+
+![results 7](https://user-images.githubusercontent.com/76923830/233046463-415f0a4e-4025-4651-9400-503cee46f9f5.JPG)
+
+## DELETE METHOD RESULTS WITH AUTHENTICATION KEY
+
+![Delete Proof](https://user-images.githubusercontent.com/76923830/233049301-f96d01cc-1eb1-4bb9-b32a-eae7f40855b1.JPG)
 
 # MISSING FEATURES
 
