@@ -16,8 +16,17 @@ class AccountFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->name();
+        $surname = $this->faker->surname();
+        $email = $this->faker->email();
+        $username = $this->faker->username();
+
+
         return [
-            //
+            'name' => $name,
+            'surname' => $surname,
+            'email' => $email,
+            'username' => $username
         ];
     }
 }
