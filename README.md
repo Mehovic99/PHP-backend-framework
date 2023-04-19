@@ -342,3 +342,9 @@ In order to make sure to test if the progarm works as intended, the features wer
 # MISSING FEATURES
 
 The only features that I was not able to provide in this version (v 1.0) of the laravel api were the features called Query Filtering and Automatic Database generation.
+
+------------------------------------------------------------------
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+# Thank You for reading this documentation. Have a pleasant day :coffee::coffee:
