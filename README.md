@@ -2,6 +2,11 @@
   <img src="https://user-images.githubusercontent.com/76923830/232968928-37ab729c-145a-428c-a190-75ffe2b67368.png"/>
 </p>
 
+# NOTE:
+THIS README FILE CONTAINS THE DOCUMENTATION AND THE REPORT ON TASK ACCOMPLISHMENT. FOR USAGE OF THE CODE, PLEASE NAVIGATE TO THE NEXT FOLDER WHICH CONTAINS A README FILE THAT PROVIDES DETAILED INSTRUCTIONS ON HOW TO USE THE API FOR PERSONAL TESTING PURPOSES
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
 # Laravel - The PHP Framework for web artisans || HulkApps Task
 
 ## Task Objective
@@ -28,3 +33,4 @@ PHP
 
 ## FRAMEWORK:
 Laravel
+
