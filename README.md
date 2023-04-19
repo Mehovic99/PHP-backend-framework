@@ -158,4 +158,151 @@ The string called slug is responsible here. It makes a unique identifier based o
 
 # FEATURE 5: Database Migration and Seeding
 
-Database migration refers to the process of migrating data from one or more source databases to one or more target databases. In simpler terms, having the values of one database used in another database. Seeding however refers to the process of automatically generating dummy data for a data set inside of a database. This is used in order to save time on creating dummy data and actually making the data as random as possible, in order to allow a wide range of testing. in this case the migration of the postsDatabase used as an example here is located inside of the file **_called 2023_04_19_050315_create_posts_table_**
+Database migration refers to the process of migrating data from one or more source databases to one or more target databases. In simpler terms, having the values of one database used in another database. Seeding however refers to the process of automatically generating dummy data for a data set inside of a database. This is used in order to save time on creating dummy data and actually making the data as random as possible, in order to allow a wide range of testing. in this case the migration of the postsDatabase used as an example here is located inside of the file called **_2023_04_19_050315_create_posts_table_**. What this file contains is the basic setup of the database being used, such as how many rows and columns it has and what data type the columns contain. Here is a code snippet for the postsDatabase migration
+```
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->string('slug')->unique()->after('title');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('posts');
+    }
+};
+```
+
+The seeder on the other hand is located in database\seeders and the file is called PostSeeder. In this case, we define how the data will be seeded with **_faker_**. Faker is a tool called by Composer that generates dummy data based on the Faker's library. In the seeding part, we define how many columns of dummy data we want created. In this code snippet below I have specified to faker that I want 10 new columns of dummy data based on the data type provided in the Posts Factory
+
+```
+public function run()
+    {
+        Post::factory()
+        ->count(10)
+        ->create();
+    }
+```
+
+The Factory is what allows the seeder to populate the data and is in fact what uses the faker to populate its data. The factory looks like this
+
+```
+class PostsFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model
+     * 
+     * @var string
+     */
+    protected $model = Post::class;
+
+    /**
+     * Define the model's default state
+     * 
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'title' => $this->faker->title(),
+            'content' => $this->faker->text()
+        ];
+    }
+}
+```
+
+# FEATURE 6: Routes
+
+Routes are used in a project in order to present some form of data to a web interface. In this project, the only routes that are being used are the following ones:
+| Route Name  |
+| ------------- |
+| GET Method  |
+| POST Method |
+| PUT Method  |
+| DELETE Method  |
+
+GET - fetched the data from the database
+POST - adds new data to the database
+PUT - modifies existing data from the database
+DELETE - removes exisitng data from the database
+
+The routes code is being used inside of the PostController. This is used in order to save coding space inside of the api.php file and in order to easily edit the code in the future should such an operation be required. The routes are defined as functions in the controller and appear as follows:
+```
+class PostsController extends Controller
+{
+    public function index()
+    {
+        $posts = Post::query()->paginate(20);
+        return Post::all();
+    }
+
+    public function store()
+    {
+        request()->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+    
+        return Post::create([
+            'title' => request('title'),
+            'content' => request('content')
+        ]);
+    }
+
+    public function update(Post $post)
+    {
+        request()->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+        
+        $success = $post->update([
+            'title' => request('title'),
+            'content' => request('content')
+        ]);
+    
+        return [
+            'success' => $success
+        ];
+    }
+
+    public function remove(Post $post)
+    {
+        $success = $post->delete();
+    return [
+        'success' => $success
+    ];
+    }
+}
+```
+And the api.php routes that call upon the defined functions appear as follows:
+```
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::get('/posts', [PostsController::class, 'index'])->middleware('auth:sanctum');
+
+Route::post('/posts', [PostsController::class, 'store'])->middleware('auth:sanctum');
+
+Route::put('/posts/{post}', [PostsController::class, 'update'])->middleware('auth:sanctum');
+
+Route::delete('/posts/{post}', [PostsController::class, 'remove'])->middleware('auth:sanctum');
+```
+
+# MISSING FEATURES
+
+The only features that I was not able to provide in this version (v 1.0) of the laravel api were the features called Query Filtering and Automatic Database generation.
