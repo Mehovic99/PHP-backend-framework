@@ -35,3 +35,28 @@ Route::post('/posts', function(){
         'content' => request('content')
     ]);
 });
+
+Route::put('/posts/{post}', function(Post $post){
+
+    request()->validate([
+        'title' => 'required',
+        'content' => 'required'
+    ]);
+    
+    $success = $post->update([
+        'title' => request('title'),
+        'content' => request('content')
+    ]);
+
+    return [
+        'success' => $success
+    ];
+});
+
+Route::delete('/posts/{post}', function(Post $post){
+    
+    $success = $post->delete();
+    return [
+        'success' => $success
+    ];
+});
