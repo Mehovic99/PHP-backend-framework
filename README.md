@@ -41,3 +41,56 @@ So in short, the following requirements need to be met in order to conclude that
 Since the framework that is being used for this project is Laravel, the task can be very easily created with laravel and composer. The reason for this is that in order to minimize time for the creation of a complex backend with php, where the developer would have to create the connection, database, seeders, migrations and routes, the laravel framework makes it easier to have all the files preloaded into the desired application. Once the files packaged with laravel are loaded, then the editing of the existing files can be done in order to create the requirements for this project.
 
 With that said, it is time to go through the working features of this backend
+
+# FEATURE 1: Authentication Middleware
+
+
+Now Laravel comes backed with its own brand of authentication, called [Sanctum](https://laravel.com/docs/10.x/sanctum). Essentially, what Laravel's sanctum allows a person to do is it allows for enablinb middleware authentication for any part of the project that a developer wants secured. In this particular instance, the authentication is used for protecting the routes that are used on the api, such as get, post, put and delete. Here is the code snippet that allows for this to work
+```
+if (Auth::attempt($credentials)){
+            $user = Auth::user();
+
+            $adminToken = $user->createToken('admin-token', ['store', 'update', 'remove']);
+            $updateToken = $user->createToken('update-token', ['store', 'update']);
+            $basicToken = $user->createToken('basic-token');
+
+            return [
+                'admin' => $adminToken->plainTextToken,
+                'update' => $updateToken->plainTextToken,
+                'basic' => $basicToken->plainTextToken
+            ];
+        }
+```
+
+But before this authentication is ran, the program needs to create the credentials, which is where the code snippet below comes into place. What it does is that it creates three different tokens in this case, that vary in power and ability over routes of the project.
+```
+Route::get('/setup', function(){
+    $credentials = [
+        'email' => 'admin@admin.com',
+        'password' => 'password'
+    ];
+
+    if (!Auth::attempt($credentials)){
+        $user = new \App\Models\User();
+
+        $user->name = 'Admin';
+        $user->email = $credentials['email'];
+        $user->password = Hash::make($credentials['password']);
+
+        $user->save();
+```
+
+An example of the generated output after running the command http://127.0.0.1:8000/setup looks like this
+```
+{"admin":"1|cFaoePzX1zBPQmEIOrqabDikxFXrFoG8Cfcc9YI8","update":"2|3FWXagSE7gqkZbznUW9HSiuv913X65HN6emFJvvD","basic":"3|GMFgLmOLR0wYAbBFInLHVo9z8p3qPKZMcUo1y58Z"}
+```
+
+After implementing the line of code that goes ```->middleware('auth:sanctum')``` after each route, the new outcome when trying to fetch the api is as follows
+
+![example 1](https://user-images.githubusercontent.com/76923830/233035828-0fc5a173-3536-49e9-905e-c8e90f467c13.JPG)
+
+However, after inserting on of the tokens as shown in the image and running the program again, the outcome is different. The outcome will look something like this
+
+![example 2](https://user-images.githubusercontent.com/76923830/233036280-5193199d-765a-4038-b9a5-dc1b7acd022e.JPG)
+
+With these examples shown, its time to move onto the second feature.
